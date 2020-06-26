@@ -5,12 +5,12 @@ import {
   freeVM,
   gc,
   pop,
-  lookup,
+  heapRead,
   getObjectCount,
 } from './gc';
 import { ObjPair } from './types';
 
-it(`should preserve objects on the stack`, () => {
+it('should preserve objects on the stack', () => {
   const vm = newVM();
   pushInt(vm, 1);
   pushInt(vm, 2);
@@ -20,7 +20,7 @@ it(`should preserve objects on the stack`, () => {
   freeVM(vm);
 });
 
-it(`should collect unreached objects`, () => {
+it('should collect unreached objects', () => {
   const vm = newVM();
   pushInt(vm, 1);
   pushInt(vm, 2);
@@ -32,7 +32,7 @@ it(`should collect unreached objects`, () => {
   freeVM(vm);
 });
 
-it(`should reach nessted objects`, () => {
+it('should reach nessted objects', () => {
   const vm = newVM();
   pushInt(vm, 1);
   pushInt(vm, 2);
@@ -47,7 +47,7 @@ it(`should reach nessted objects`, () => {
   freeVM(vm);
 });
 
-it(`should handle cycles`, () => {
+it('should handle cycles', () => {
   const vm = newVM();
   pushInt(vm, 1);
   pushInt(vm, 2);
@@ -56,28 +56,13 @@ it(`should handle cycles`, () => {
   pushInt(vm, 4);
   const b = pushPair(vm);
 
-  const objA = lookup(vm, a) as ObjPair;
+  const objA = heapRead(vm, a) as ObjPair;
   objA.tail = b;
 
-  const objB = lookup(vm, b) as ObjPair;
+  const objB = heapRead(vm, b) as ObjPair;
   objB.tail = a;
 
   gc(vm);
   expect(getObjectCount(vm)).toBe(4);
-  freeVM(vm);
-});
-
-it(`should test performance`, () => {
-  const vm = newVM();
-
-  for (let i = 0; i < 100000; i++) {
-    for (let j = 0; j < 20; j++) {
-      pushInt(vm, i);
-    }
-
-    for (let k = 0; k < 20; k++) {
-      pop(vm);
-    }
-  }
   freeVM(vm);
 });

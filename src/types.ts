@@ -31,13 +31,11 @@ export interface ObjPair extends Obj {
 // the heap. The stack just points to them.
 export type VM = {
   stack: NullablePtr[];
-  stackSize: number;
 
   // The beginning of the contiguous heap of memory that objects are allocated
   // from.
   heap: Obj[];
 
-  heapStart: Ptr;
   // The beginning of the next chunk of memory to be allocated from the heap.
   next: Ptr;
 };
