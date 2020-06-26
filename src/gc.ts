@@ -30,8 +30,7 @@ export const heapRead = (vm: VM, ptr: Ptr): Obj => {
   return vm.heap[ptr];
 };
 
-export const heapWrite = (vm: VM, ptr: Ptr, object: Obj, size: number) => {
-  size; // always 1, no used
+export const heapWrite = (vm: VM, ptr: Ptr, object: Obj) => {
   vm.heap[ptr] = { ...object };
 };
 
@@ -132,7 +131,7 @@ const compact = (vm: VM) => {
     if (object.moveTo !== null) {
       // Move the object from its old location to its new location.
       const to = object.moveTo;
-      heapWrite(vm, to, object, OBJ_SIZE);
+      heapWrite(vm, to, object);
       // Clear the mark.
       heapRead(vm, to).moveTo = null;
     }
@@ -171,7 +170,7 @@ export const newObject = (vm: VM, type: ObjType): Ptr => {
     type: type,
     moveTo: null,
   };
-  heapWrite(vm, ptr, object, 1);
+  heapWrite(vm, ptr, object);
   vm.next += OBJ_SIZE;
   return ptr;
 };

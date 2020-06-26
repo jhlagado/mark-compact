@@ -22,7 +22,9 @@
   ],
   "author": "John Hardy <“jh@lagado.com”> (https://www.lagado.com)",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "wabt": "^1.0.17"
+  },
   "devDependencies": {
     "@types/fetch-mock": "^7.3.2",
     "@types/jest": "^24.9.1",
