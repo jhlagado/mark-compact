@@ -139,19 +139,6 @@ const compact = (vm: VM) => {
   }
 };
 
-// Pops the top-most reference to an object from the stack.
-export const pop = (vm: VM): NullablePtr => {
-  return vm.stack.pop() as NullablePtr;
-};
-
-// Pushes a reference to [value] onto the VM's stack.
-const push = (vm: VM, value: NullablePtr) => {
-  if (vm.stack.length === STACK_MAX) {
-    throw new Error('Stack overflow.\n');
-  }
-  vm.stack.push(value);
-};
-
 // Free memory for all unused objects.
 export const gc = (vm: VM) => {
   // Find out which objects are still in use.
@@ -187,6 +174,19 @@ export const newObject = (vm: VM, type: ObjType): Ptr => {
   heapWrite(vm, ptr, object, 1);
   vm.next += OBJ_SIZE;
   return ptr;
+};
+
+// Pops the top-most reference to an object from the stack.
+export const pop = (vm: VM): NullablePtr => {
+  return vm.stack.pop() as NullablePtr;
+};
+
+// Pushes a reference to [value] onto the VM's stack.
+const push = (vm: VM, value: NullablePtr) => {
+  if (vm.stack.length === STACK_MAX) {
+    throw new Error('Stack overflow.\n');
+  }
+  vm.stack.push(value);
 };
 
 // Creates a new int object and pushes it onto the stack.
